@@ -36,7 +36,17 @@ export const translations = {
             net: "NETTÓ BÉR:",
             otherCosts: "Egyéb terhek (amit a munkáltató fizet utánad):",
             szocho: "Szociális hozzájárulási adó (13%):",
-            totalCost: "Teljes bérköltség:"
+            totalCost: "Teljes bérköltség:",
+            hourlyWageCalc: "Órabér Kalkulátor",
+            hoursPerWeek: "Heti munkaórák:",
+            workHoursPerMonth: "Havi munkaóra",
+            hours: "óra",
+            yourHourlyWage: "Az órabéred",
+            switchToHourlyInput: "Váltás órabér megadására",
+            enterHourlyWage: "Add meg az órabért",
+            calculatedGross: "Kiszámolt havi bruttó",
+            applyGrossIncome: "Alkalmazd ezt a bruttó fizetést",
+            switchToGrossInput: "Vissza bruttó megadáshoz"
         },
         stats: {
             title: "Hol helyezkedsz el a létrán?",
@@ -64,7 +74,13 @@ export const translations = {
             q4: "4. Negyedik 20%",
             q4Desc: "Átlag feletti életszínvonal, van lehetőség megtakarításra.",
             q5: "5. Felső 20% (Leggazdagabbak)",
-            q5Desc: "Kiemelkedő jövedelem, magas vásárlóerő."
+            q5Desc: "Kiemelkedő jövedelem, magas vásárlóerő.",
+            methodologyTitle: "Módszertan: Miért ezek a számok?",
+            methodologyExplanation: "A kalkulátorban használt jövedelmi sávok (ötödök) a dolgozó társadalomra vonatkozó becslések, nem a teljes lakosságra.",
+            methodologyPoint1: "A KSH hivatalos adatai gyakran az egy főre jutó jövedelmet mérik (beleértve a nyugdíjasokat és gyerekeket is), ami alacsonyabb.",
+            methodologyPoint2: "Mi a bruttó béreket vesszük alapul, hogy reálisabb képet kapj a munkaerőpiaci helyzetedről.",
+            methodologyPoint3: "Az adatok a 2024-es/2025-ös bérstatisztikák és a tipikus jövedelemeloszlás alapján lettek megbecsülve.",
+            methodologySource: "Forrás: KSH Gyorstájékoztatók és bérstatisztikák alapján becsült értékek."
         },
         expenses: {
             title: "Mennyiből élsz meg?",
@@ -207,7 +223,17 @@ export const translations = {
             net: "Net Income",
             otherCosts: "Employer also pays:",
             szocho: "SZOCHO (13%)",
-            totalCost: "Total Cost to Employer",
+            totalCost: "Total Employer Cost:",
+            hourlyWageCalc: "Hourly Wage Calculator",
+            hoursPerWeek: "Hours per week:",
+            workHoursPerMonth: "Work hours per month",
+            hours: "hours",
+            yourHourlyWage: "Your hourly wage",
+            switchToHourlyInput: "Switch to hourly wage input",
+            enterHourlyWage: "Enter hourly wage",
+            calculatedGross: "Calculated monthly gross",
+            applyGrossIncome: "Apply this gross income",
+            switchToGrossInput: "Switch to gross input"
         },
         stats: {
             title: "Where do you stand?",
@@ -233,6 +259,12 @@ export const translations = {
             q4Desc: "Above average income",
             q5: "Top 20%",
             q5Desc: "Highest income group",
+            methodologyTitle: "Methodology: Why these numbers?",
+            methodologyExplanation: "The income quintiles used here are estimates for the working population, not the entire population.",
+            methodologyPoint1: "Official KSH data often measures per capita income (including pensioners and children), which is lower.",
+            methodologyPoint2: "We use gross wages to give you a more realistic picture of your position in the labor market.",
+            methodologyPoint3: "Data is estimated based on 2024/2025 wage statistics and typical income distribution.",
+            methodologySource: "Source: Estimated values based on KSH reports and wage statistics.",
             youAreHere: "YOU ARE HERE",
             youGuessed: "YOUR GUESS",
             retry: "Try again",
@@ -378,7 +410,17 @@ export const translations = {
             net: "Ingreso Neto",
             otherCosts: "El empleador también paga:",
             szocho: "SZOCHO (13%)",
-            totalCost: "Costo Total para el Empleador"
+            totalCost: "Costo Total para el Empleador",
+            hourlyWageCalc: "Hourly Wage Calculator",
+            hoursPerWeek: "Hours per week:",
+            workHoursPerMonth: "Work hours per month",
+            hours: "hours",
+            yourHourlyWage: "Your hourly wage",
+            switchToHourlyInput: "Switch to hourly wage input",
+            enterHourlyWage: "Enter hourly wage",
+            calculatedGross: "Calculated monthly gross",
+            applyGrossIncome: "Apply this gross income",
+            switchToGrossInput: "Switch to gross input"
         },
         stats: {
             title: "¿Dónde te encuentras?",
@@ -404,6 +446,12 @@ export const translations = {
             q4Desc: "Ingresos por encima del promedio",
             q5: "20% Superior",
             q5Desc: "Grupo de ingresos más altos",
+            methodologyTitle: "Methodology: Why these numbers?",
+            methodologyExplanation: "The income quintiles used here are estimates for the working population, not the entire population.",
+            methodologyPoint1: "Official KSH data often measures per capita income (including pensioners and children), which is lower.",
+            methodologyPoint2: "We use gross wages to give you a more realistic picture of your position in the labor market.",
+            methodologyPoint3: "Data is estimated based on 2024/2025 wage statistics and typical income distribution.",
+            methodologySource: "Source: Estimated values based on KSH reports and wage statistics.",
             youAreHere: "ESTÁS AQUÍ",
             youGuessed: "TU APUESTA",
             retry: "Intentar de nuevo"
@@ -549,7 +597,17 @@ export const translations = {
             net: "NETTOGEHALT:",
             otherCosts: "Sonstige Kosten (vom Arbeitgeber gezahlt):",
             szocho: "Sozialbeitragssteuer (13%):",
-            totalCost: "Gesamtarbeitskosten:"
+            totalCost: "Gesamtarbeitskosten:",
+            hourlyWageCalc: "Hourly Wage Calculator",
+            hoursPerWeek: "Hours per week:",
+            workHoursPerMonth: "Work hours per month",
+            hours: "hours",
+            yourHourlyWage: "Your hourly wage",
+            switchToHourlyInput: "Switch to hourly wage input",
+            enterHourlyWage: "Enter hourly wage",
+            calculatedGross: "Calculated monthly gross",
+            applyGrossIncome: "Apply this gross income",
+            switchToGrossInput: "Switch to gross input"
         },
         stats: {
             title: "Wo stehst du auf der Leiter?",
@@ -577,7 +635,13 @@ export const translations = {
             q4: "4. Vierte 20%",
             q4Desc: "Überdurchschnittlicher Lebensstandard, Sparfähigkeit.",
             q5: "5. Obere 20% (Reichste)",
-            q5Desc: "Hervorragendes Einkommen, hohe Kaufkraft."
+            q5Desc: "Hervorragendes Einkommen, hohe Kaufkraft.",
+            methodologyTitle: "Methodik: Warum diese Zahlen?",
+            methodologyExplanation: "Die hier verwendeten Einkommensquintile sind Schätzungen für die erwerbstätige Bevölkerung, nicht für die gesamte Bevölkerung.",
+            methodologyPoint1: "Offizielle KSH-Daten messen oft das Pro-Kopf-Einkommen (einschließlich Rentner und Kinder), das niedriger ist.",
+            methodologyPoint2: "Wir verwenden Bruttolöhne, um Ihnen ein realistischeres Bild Ihrer Position auf dem Arbeitsmarkt zu geben.",
+            methodologyPoint3: "Die Daten werden basierend auf Lohnstatistiken von 2024/2025 und der typischen Einkommensverteilung geschätzt.",
+            methodologySource: "Quelle: Geschätzte Werte basierend auf KSH-Berichten und Lohnstatistiken."
         },
         expenses: {
             title: "Wovon lebst du?",
@@ -720,7 +784,17 @@ export const translations = {
             net: "НЕТТО ЗАРПЛАТА:",
             otherCosts: "Другие расходы (оплачивает работодатель):",
             szocho: "Налог на соц. взносы (13%):",
-            totalCost: "Общая стоимость труда:"
+            totalCost: "Общая стоимость труда:",
+            hourlyWageCalc: "Hourly Wage Calculator",
+            hoursPerWeek: "Hours per week:",
+            workHoursPerMonth: "Work hours per month",
+            hours: "hours",
+            yourHourlyWage: "Your hourly wage",
+            switchToHourlyInput: "Switch to hourly wage input",
+            enterHourlyWage: "Enter hourly wage",
+            calculatedGross: "Calculated monthly gross",
+            applyGrossIncome: "Apply this gross income",
+            switchToGrossInput: "Switch to gross input"
         },
         stats: {
             title: "Где вы на лестнице?",
@@ -748,7 +822,13 @@ export const translations = {
             q4: "4. Четвертые 20%",
             q4Desc: "Уровень жизни выше среднего, возможность сбережений.",
             q5: "5. Верхние 20% (Богатейшие)",
-            q5Desc: "Выдающийся доход, высокая покупательная способность."
+            q5Desc: "Выдающийся доход, высокая покупательная способность.",
+            methodologyTitle: "Methodology: Why these numbers?",
+            methodologyExplanation: "The income quintiles used here are estimates for the working population, not the entire population.",
+            methodologyPoint1: "Official KSH data often measures per capita income (including pensioners and children), which is lower.",
+            methodologyPoint2: "We use gross wages to give you a more realistic picture of your position in the labor market.",
+            methodologyPoint3: "Data is estimated based on 2024/2025 wage statistics and typical income distribution.",
+            methodologySource: "Source: Estimated values based on KSH reports and wage statistics."
         },
         expenses: {
             title: "На сколько вы живете?",
@@ -891,7 +971,17 @@ export const translations = {
             net: "税后工资：",
             otherCosts: "其他成本（由雇主支付）：",
             szocho: "社会贡献税 (13%)：",
-            totalCost: "总劳动力成本："
+            totalCost: "总劳动力成本：",
+            hourlyWageCalc: "Hourly Wage Calculator",
+            hoursPerWeek: "Hours per week:",
+            workHoursPerMonth: "Work hours per month",
+            hours: "hours",
+            yourHourlyWage: "Your hourly wage",
+            switchToHourlyInput: "Switch to hourly wage input",
+            enterHourlyWage: "Enter hourly wage",
+            calculatedGross: "Calculated monthly gross",
+            applyGrossIncome: "Apply this gross income",
+            switchToGrossInput: "Switch to gross input"
         },
         stats: {
             title: "你在阶梯的哪里？",
@@ -919,7 +1009,13 @@ export const translations = {
             q4: "4. 第四个 20%",
             q4Desc: "高于平均生活水平，有能力储蓄。",
             q5: "5. 顶部 20% (最富有)",
-            q5Desc: "收入突出，购买力强。"
+            q5Desc: "收入突出，购买力强。",
+            methodologyTitle: "Methodology: Why these numbers?",
+            methodologyExplanation: "The income quintiles used here are estimates for the working population, not the entire population.",
+            methodologyPoint1: "Official KSH data often measures per capita income (including pensioners and children), which is lower.",
+            methodologyPoint2: "We use gross wages to give you a more realistic picture of your position in the labor market.",
+            methodologyPoint3: "Data is estimated based on 2024/2025 wage statistics and typical income distribution.",
+            methodologySource: "Source: Estimated values based on KSH reports and wage statistics."
         },
         expenses: {
             title: "你的生活费是多少？",
@@ -1062,7 +1158,17 @@ export const translations = {
             net: "NET MAAŞ:",
             otherCosts: "Diğer maliyetler (işveren öder):",
             szocho: "Sosyal Katkı Vergisi (%13):",
-            totalCost: "Toplam İşgücü Maliyeti:"
+            totalCost: "Toplam İşgücü Maliyeti:",
+            hourlyWageCalc: "Hourly Wage Calculator",
+            hoursPerWeek: "Hours per week:",
+            workHoursPerMonth: "Work hours per month",
+            hours: "hours",
+            yourHourlyWage: "Your hourly wage",
+            switchToHourlyInput: "Switch to hourly wage input",
+            enterHourlyWage: "Enter hourly wage",
+            calculatedGross: "Calculated monthly gross",
+            applyGrossIncome: "Apply this gross income",
+            switchToGrossInput: "Switch to gross input"
         },
         stats: {
             title: "Merdivenin neresindesin?",
@@ -1090,7 +1196,13 @@ export const translations = {
             q4: "4. Dördüncü %20",
             q4Desc: "Ortalama üstü yaşam standardı, tasarruf imkanı.",
             q5: "5. Üst %20 (En Zengin)",
-            q5Desc: "Olağanüstü gelir, yüksek alım gücü."
+            q5Desc: "Olağanüstü gelir, yüksek alım gücü.",
+            methodologyTitle: "Methodology: Why these numbers?",
+            methodologyExplanation: "The income quintiles used here are estimates for the working population, not the entire population.",
+            methodologyPoint1: "Official KSH data often measures per capita income (including pensioners and children), which is lower.",
+            methodologyPoint2: "We use gross wages to give you a more realistic picture of your position in the labor market.",
+            methodologyPoint3: "Data is estimated based on 2024/2025 wage statistics and typical income distribution.",
+            methodologySource: "Source: Estimated values based on KSH reports and wage statistics."
         },
         expenses: {
             title: "Ne kadara yaşıyorsun?",

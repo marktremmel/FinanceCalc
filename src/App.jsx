@@ -481,6 +481,74 @@ export default function App() {
                         <span>{employerCost.toLocaleString()} Ft</span>
                       </div>
                     </div>
+
+                    {/* Hourly Wage Calculator */}
+                    <div className="mt-6 pt-6 border-t border-slate-200">
+                      <h3 className="font-semibold text-indigo-700 mb-4">⏱️ {t.income.hourlyWageCalc}</h3>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-slate-600 mb-2">{t.income.hoursPerWeek}</label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="80"
+                          value={hoursPerWeek}
+                          onChange={(e) => setHoursPerWeek(Number(e.target.value))}
+                          className="w-full p-2 border rounded"
+                        />
+                        <p className="text-xs text-slate-400 mt-1">{t.income.workHoursPerMonth}: {Math.round(monthlyWorkHours)} {t.income.hours}</p>
+                      </div>
+
+                      {calculationMode === 'fromGross' ? (
+                        <>
+                          <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                            <p className="text-sm text-slate-600 mb-2">{t.income.yourHourlyWage}:</p>
+                            <p className="text-3xl font-bold text-emerald-700">{formatHU(calculatedHourlyWage)} Ft/óra</p>
+                            <p className="text-xs text-slate-500 mt-2">
+                              {formatHU(grossIncome)} Ft ÷ {Math.round(monthlyWorkHours)} óra/hó
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => {
+                              setCalculationMode('fromHourly');
+                              setHourlyWage(calculatedHourlyWage);
+                            }}
+                            className="mt-3 w-full text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded hover:bg-indigo-200 transition-colors">
+                            ↔️ {t.income.switchToHourlyInput}
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <div className="mb-3">
+                            <label className="block text-sm font-medium text-slate-600 mb-2">{t.income.enterHourlyWage}:</label>
+                            <input
+                              type="number"
+                              value={hourlyWage}
+                              onChange={(e) => setHourlyWage(Number(e.target.value))}
+                              className="w-full p-2 border rounded"
+                              placeholder="pl. 2500"
+                            />
+                          </div>
+                          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <p className="text-sm text-slate-600 mb-2">{t.income.calculatedGross}:</p>
+                            <p className="text-3xl font-bold text-blue-700">{formatHU(grossFromHourly)} Ft/hó</p>
+                            <p className="text-xs text-slate-500 mt-2">
+                              {formatHU(hourlyWage)} Ft/óra × {Math.round(monthlyWorkHours)} óra/hó
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => setGrossIncome(grossFromHourly)}
+                            className="mt-3 w-full text-sm bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 transition-colors">
+                            ✓ {t.income.applyGrossIncome}
+                          </button>
+                          <button
+                            onClick={() => setCalculationMode('fromGross')}
+                            className="mt-2 w-full text-sm bg-slate-100 text-slate-700 px-4 py-2 rounded hover:bg-slate-200 transition-colors">
+                            ↔️ {t.income.switchToGrossInput}
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -493,7 +561,6 @@ export default function App() {
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-indigo-800">{t.stats.title}</h2>
-
               {/* Quintile Methodology Explanation */}
               <div className="mt-6 bg-amber-50 border-l-4 border-amber-400 p-4 text-left max-w-3xl mx-auto">
                 <p className="text-sm font-semibold text-amber-900 mb-2">📊 {t.stats.methodologyTitle}</p>
@@ -510,7 +577,6 @@ export default function App() {
                 </p>
               </div>
             </div>
-
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white p-6 rounded-xl shadow-md">
                 <h3 className="font-bold text-gray-700 mb-4">{t.stats.chartTitle}</h3>
@@ -979,7 +1045,7 @@ export default function App() {
 
                 <div className="bg-indigo-900 text-white p-8 rounded-xl shadow-xl flex flex-col justify-center items-center text-center">
                   <TrendingUp size={64} className="text-orange-400 mb-6" />
-                  <h3 className="text-2xl font-bold mb-4">{t.inflation.lesson}</h3>
+                  <h3 className="text-1xl font-bold mb-4">{t.inflation.lesson}</h3>
                   <p className="text-lg leading-relaxed opacity-90">
                     "{t.inflation.lessonText}"
                   </p>
