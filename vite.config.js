@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/FinanceCalc/',
+  // Use root base for Vercel, /FinanceCalc/ for GitHub Pages
+  base: process.env.VERCEL ? '/' : '/FinanceCalc/',
   plugins: [react()],
 })
