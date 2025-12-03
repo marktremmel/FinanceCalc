@@ -8,7 +8,8 @@ export const translations = {
             expenses: "Kiadások",
             loan: "Lakás & Hitel",
             inflation: "Infláció",
-            investment: "Befektetés"
+            investment: "Befektetés",
+            about: "A programról"
         },
         income: {
             introTitle: "Tudtad? Átlag vs. Medián",
@@ -179,12 +180,63 @@ export const translations = {
                 sp500: "A legnagyobb amerikai cégek részvényei. Magasabb kockázat, de történelmileg magasabb hozam (~12.5%).",
             }
         },
+        simulator: {
+            title: "Élet Szimulátor (Béta)",
+            desc: "Szimuláld az életet pénzügyi döntéseid alapján! Minden nap egy kockadobás dönti el a sorsodat.",
+            balance: "Egyenleg",
+            happiness: "Boldogság",
+            day: "Nap",
+            play: "Indítás",
+            pause: "Szünet",
+            step: "1 Nap",
+            speed: "Sebesség",
+            diary: "Napló",
+            events: {
+                broken_appliance: "Elromlott egy készülék 💥",
+                fine: "Bírság 🚓",
+                medical: "Orvosi számla 🏥",
+                theft: "Kiraboltak! 🦹",
+                bad_food: "Romlott étel 🤢",
+                lost_ticket: "Elhagytad a bérleted 🎫",
+                umbrella: "Esernyőt vettél ☂️",
+                coffee_spill: "Kilöttyent a kávé ☕",
+                work: "Munkanap 💼",
+                groceries: "Bevásárlás 🛒",
+                read_book: "Olvasás 📖",
+                walk: "Séta 🚶",
+                netflix: "Netflixezés 📺",
+                found_money: "Pénzt találtál! 💰",
+                discount: "Kedvezmény! 🏷️",
+                compliment: "Bókot kaptál 😊",
+                good_meal: "Finom vacsora 🍕",
+                bonus: "Bónusz a munkahelyen 💎",
+                gift: "Ajándékot kaptál 🎁",
+                lottery: "Nyertél a lottón 🎰",
+                promotion: "Előléptetés! 📈"
+            },
+            weather: {
+                sunny: "Napos ☀️",
+                rainy: "Esős 🌧️",
+                cloudy: "Felhős ☁️",
+                stormy: "Viharos ⛈️",
+                snowy: "Havazás ❄️"
+            }
+        },
         sources: {
             disclaimer: "Az adatok tájékoztató jellegűek és becsléseken alapulnak.",
             ksh: "Forrás: KSH",
             nm: "Forrás: negyzetmeterarak.hu",
             bankmonitor: "Forrás: Bankmonitor",
         },
+        about: {
+            title: "A Programról",
+            description: "Ez a program a digitális pénzügyi tudatosság fejlesztését szolgálja 9-10. évfolyamos diákok számára. Célja, hogy interaktív módon mutassa be a mindennapi pénzügyi döntések hatásait.",
+            usage: "Használd a fenti füleket a különböző témák felfedezéséhez! Kezdd a bevételekkel, majd haladj a kiadások, hitelek és befektetések felé.",
+            disclaimer: "Ezt a programot Tremmel Márk ( a SEK Budapest Digitális Kultúra tanára) készítette a Google Antigravity segítségével a digitális pénzügyi tudatosság oktatására. A program hibákat tartalmazhat.",
+            resources: "Oktatási segédanyagok:",
+            sources: "Felhasznált források:",
+            linkText: "ghoul3.notion.site"
+        }
     },
     en: {
         title: "The Great Calculator",
@@ -196,6 +248,7 @@ export const translations = {
             loan: "Housing",
             inflation: "Inflation",
             investment: "Investment",
+            about: "About"
         },
         income: {
             introTitle: "Gross vs. Net Income",
@@ -366,12 +419,63 @@ export const translations = {
                 sp500: "Shares of the largest US companies. Higher risk, but historically higher returns (~12.5%).",
             }
         },
+        simulator: {
+            title: "Life Simulator (Beta)",
+            desc: "Simulate life based on your financial decisions! Each day is a dice roll determining your fate.",
+            balance: "Balance",
+            happiness: "Happiness",
+            day: "Day",
+            play: "Play",
+            pause: "Pause",
+            step: "1 Day",
+            speed: "Speed",
+            diary: "Diary",
+            events: {
+                broken_appliance: "Appliance broke 💥",
+                fine: "Got a fine 🚓",
+                medical: "Medical bill 🏥",
+                theft: "Got robbed! 🦹",
+                bad_food: "Food poisoning 🤢",
+                lost_ticket: "Lost ticket 🎫",
+                umbrella: "Bought umbrella ☂️",
+                coffee_spill: "Spilled coffee ☕",
+                work: "Work day 💼",
+                groceries: "Bought groceries 🛒",
+                read_book: "Read a book 📖",
+                walk: "Went for a walk 🚶",
+                netflix: "Watched Netflix 📺",
+                found_money: "Found money! 💰",
+                discount: "Got a discount! 🏷️",
+                compliment: "Got compliment 😊",
+                good_meal: "Nice meal out 🍕",
+                bonus: "Work bonus! 💎",
+                gift: "Got a gift! 🎁",
+                lottery: "Won lottery! 🎰",
+                promotion: "Promotion! 📈"
+            },
+            weather: {
+                sunny: "Sunny ☀️",
+                rainy: "Rainy 🌧️",
+                cloudy: "Cloudy ☁️",
+                stormy: "Stormy ⛈️",
+                snowy: "Snowy ❄️"
+            }
+        },
         sources: {
             disclaimer: "Data is for informational purposes and based on estimates.",
             ksh: "Source: KSH",
             nm: "Source: negyzetmeterarak.hu",
             bankmonitor: "Source: Bankmonitor",
         },
+        about: {
+            title: "About",
+            description: "This program is designed to teach digital financial literacy to 9-10th grade students. It aims to interactively demonstrate the impact of everyday financial decisions.",
+            usage: "Use the tabs above to explore different topics! Start with income, then move on to expenses, loans, and investments.",
+            disclaimer: "Created by Mark Tremmel (SEK Budapest) with Google Antigravity to teach digital financial literacy. May contain bugs.",
+            resources: "Lesson Resources:",
+            sources: "Sources used:",
+            linkText: "ghoul3.notion.site"
+        }
     },
     es: {
         title: "La Gran Calculadora",
@@ -382,7 +486,8 @@ export const translations = {
             expenses: "Gastos",
             loan: "Vivienda",
             inflation: "Inflación",
-            investment: "Inversión"
+            investment: "Inversión",
+            about: "Sobre"
         },
         income: {
             introTitle: "Bruto vs Neto",
@@ -553,11 +658,62 @@ export const translations = {
                 sp500: "Acciones de las mayores empresas de EE. UU. Mayor riesgo, pero históricamente mayores rendimientos (~12.5%)."
             }
         },
+        simulator: {
+            title: "Simulador de Vida (Beta)",
+            desc: "Simula la vida según tus decisiones financieras. Cada día es una tirada de dados.",
+            balance: "Saldo",
+            happiness: "Felicidad",
+            day: "Día",
+            play: "Jugar",
+            pause: "Pausar",
+            step: "1 Día",
+            speed: "Velocidad",
+            diary: "Diario",
+            events: {
+                broken_appliance: "Electrodoméstico roto 💥",
+                fine: "Multa 🚓",
+                medical: "Factura médica 🏥",
+                theft: "¡Robo! 🦹",
+                bad_food: "Comida en mal estado 🤢",
+                lost_ticket: "Billete perdido 🎫",
+                umbrella: "Paraguas comprado ☂️",
+                coffee_spill: "Café derramado ☕",
+                work: "Día de trabajo 💼",
+                groceries: "Compra de comestibles 🛒",
+                read_book: "Leer un libro 📖",
+                walk: "Paseo 🚶",
+                netflix: "Ver Netflix 📺",
+                found_money: "¡Dinero encontrado! 💰",
+                discount: "¡Descuento! 🏷️",
+                compliment: "Cumplido recibido 😊",
+                good_meal: "Buena comida 🍕",
+                bonus: "¡Bono de trabajo! 💎",
+                gift: "¡Regalo recibido! 🎁",
+                lottery: "¡Lotería ganada! 🎰",
+                promotion: "¡Promoción! 📈"
+            },
+            weather: {
+                sunny: "Soleado ☀️",
+                rainy: "Lluvioso 🌧️",
+                cloudy: "Nublado ☁️",
+                stormy: "Tormentoso ⛈️",
+                snowy: "Nevado ❄️"
+            }
+        },
         sources: {
             disclaimer: "Los datos son con fines informativos y se basan en estimaciones.",
             ksh: "Fuente: KSH",
             nm: "Fuente: negyzetmeterarak.hu",
             bankmonitor: "Fuente: Bankmonitor"
+        },
+        about: {
+            title: "Sobre el Programa",
+            description: "Este programa está diseñado para enseñar alfabetización financiera digital a estudiantes de 9º y 10º grado. Su objetivo es demostrar de forma interactiva el impacto de las decisiones financieras cotidianas.",
+            usage: "¡Usa las pestañas de arriba para explorar diferentes temas! Comienza con los ingresos, luego pasa a los gastos, préstamos e inversiones.",
+            disclaimer: "Creado por Mark Tremmel (SEK Budapest) con Google Antigravity para enseñar alfabetización financiera digital. Puede contener errores.",
+            resources: "Recursos de la lección:",
+            sources: "Fuentes utilizadas:",
+            linkText: "ghoul3.notion.site"
         }
     },
     de: {
@@ -569,7 +725,8 @@ export const translations = {
             expenses: "Ausgaben",
             loan: "Wohnen",
             inflation: "Inflation",
-            investment: "Investition"
+            investment: "Investition",
+            about: "Über"
         },
         income: {
             introTitle: "Brutto vs. Netto",
@@ -740,11 +897,62 @@ export const translations = {
                 sp500: "Aktien der größten US-Unternehmen. Höheres Risiko, aber historisch höhere Renditen (~12,5%)."
             }
         },
+        simulator: {
+            title: "Lebenssimulator (Beta)",
+            desc: "Simuliere das Leben basierend auf deinen finanziellen Entscheidungen. Jeder Tag ist ein Würfelwurf.",
+            balance: "Kontostand",
+            happiness: "Glück",
+            day: "Tag",
+            play: "Spielen",
+            pause: "Pause",
+            step: "1 Tag",
+            speed: "Geschwindigkeit",
+            diary: "Tagebuch",
+            events: {
+                broken_appliance: "Gerät kaputt 💥",
+                fine: "Geldstrafe 🚓",
+                medical: "Arztrechnung 🏥",
+                theft: "Ausgeraubt! 🦹",
+                bad_food: "Lebensmittelvergiftung 🤢",
+                lost_ticket: "Ticket verloren 🎫",
+                umbrella: "Regenschirm gekauft ☂️",
+                coffee_spill: "Kaffee verschüttet ☕",
+                work: "Arbeitstag 💼",
+                groceries: "Lebensmittel eingekauft 🛒",
+                read_book: "Buch gelesen 📖",
+                walk: "Spaziergang 🚶",
+                netflix: "Netflix geschaut 📺",
+                found_money: "Geld gefunden! 💰",
+                discount: "Rabatt bekommen! 🏷️",
+                compliment: "Kompliment bekommen 😊",
+                good_meal: "Gutes Essen 🍕",
+                bonus: "Arbeitsbonus! 💎",
+                gift: "Geschenk erhalten! 🎁",
+                lottery: "Lotto gewonnen! 🎰",
+                promotion: "Beförderung! 📈"
+            },
+            weather: {
+                sunny: "Sonnig ☀️",
+                rainy: "Regnerisch 🌧️",
+                cloudy: "Bewölkt ☁️",
+                stormy: "Stürmisch ⛈️",
+                snowy: "Schneereich ❄️"
+            }
+        },
         sources: {
             disclaimer: "Die Daten dienen nur zu Informationszwecken und basieren auf Schätzungen.",
             ksh: "Quelle: KSH",
             nm: "Quelle: negyzetmeterarak.hu",
             bankmonitor: "Quelle: Bankmonitor"
+        },
+        about: {
+            title: "Über das Programm",
+            description: "Dieses Programm wurde entwickelt, um Schülern der 9. und 10. Klasse digitale Finanzkompetenz zu vermitteln. Ziel ist es, die Auswirkungen alltäglicher finanzieller Entscheidungen interaktiv aufzuzeigen.",
+            usage: "Verwenden Sie die Registerkarten oben, um verschiedene Themen zu erkunden! Beginnen Sie mit dem Einkommen und gehen Sie dann zu Ausgaben, Krediten und Investitionen über.",
+            disclaimer: "Erstellt von Mark Tremmel (SEK Budapest) mit Google Antigravity zur Vermittlung digitaler Finanzkompetenz. Kann Fehler enthalten.",
+            resources: "Unterrichtsmaterialien:",
+            sources: "Verwendete Quellen:",
+            linkText: "ghoul3.notion.site"
         }
     },
     ru: {
@@ -927,11 +1135,62 @@ export const translations = {
                 sp500: "Акции крупнейших компаний США. Выше риск, но исторически выше доход (~12.5%)."
             }
         },
+        simulator: {
+            title: "Симулятор жизни (Бета)",
+            desc: "Симулируйте жизнь на основе финансовых решений. Каждый день - бросок костей.",
+            balance: "Баланс",
+            happiness: "Счастье",
+            day: "День",
+            play: "Играть",
+            pause: "Пауза",
+            step: "1 день",
+            speed: "Скорость",
+            diary: "Дневник",
+            events: {
+                broken_appliance: "Сломался прибор 💥",
+                fine: "Штраф 🚓",
+                medical: "Медсчет 🏥",
+                theft: "Ограбление! 🦹",
+                bad_food: "Отравление 🤢",
+                lost_ticket: "Потерял билет 🎫",
+                umbrella: "Купил зонт ☂️",
+                coffee_spill: "Разлил кофе ☕",
+                work: "Рабочий день 💼",
+                groceries: "Продукты 🛒",
+                read_book: "Чтение книги 📖",
+                walk: "Прогулка 🚶",
+                netflix: "Смотрел Netflix 📺",
+                found_money: "Нашел деньги! 💰",
+                discount: "Скидка! 🏷️",
+                compliment: "Комплимент 😊",
+                good_meal: "Вкусная еда 🍕",
+                bonus: "Премия! 💎",
+                gift: "Подарок! 🎁",
+                lottery: "Выиграл в лотерею! 🎰",
+                promotion: "Повышение! 📈"
+            },
+            weather: {
+                sunny: "Солнечно ☀️",
+                rainy: "Дождливо 🌧️",
+                cloudy: "Облачно ☁️",
+                stormy: "Штормовой ⛈️",
+                snowy: "Снежно ❄️"
+            }
+        },
         sources: {
             disclaimer: "Данные носят информационный характер и основаны на оценках.",
             ksh: "Источник: KSH",
             nm: "Источник: negyzetmeterarak.hu",
             bankmonitor: "Источник: Bankmonitor"
+        },
+        about: {
+            title: "О программе",
+            description: "Эта программа разработана для обучения цифровой финансовой грамотности учащихся 9-10 классов. Ее цель - интерактивно показать влияние повседневных финансовых решений.",
+            usage: "Используйте вкладки выше для изучения различных тем! Начните с доходов, затем переходите к расходам, кредитам и инвестициям.",
+            disclaimer: "Создано Марком Треммелем (SEK Budapest) с помощью Google Antigravity для обучения цифровой финансовой грамотности. Может содержать ошибки.",
+            resources: "Учебные материалы:",
+            sources: "Использованные источники:",
+            linkText: "ghoul3.notion.site"
         }
     },
     zh: {
@@ -1114,11 +1373,62 @@ export const translations = {
                 sp500: "美国最大公司的股票。风险较高，但历史上回报较高 (~12.5%)。"
             }
         },
+        simulator: {
+            title: "生活模拟器（测试版）",
+            desc: "根据你的财务决定模拟生活。每天都是一次投骰子。",
+            balance: "余额",
+            happiness: "幸福",
+            day: "天",
+            play: "开始",
+            pause: "暂停",
+            step: "1天",
+            speed: "速度",
+            diary: "日记",
+            events: {
+                broken_appliance: "家电损坏 💥",
+                fine: "罚款 🚓",
+                medical: "医疗账单 🏥",
+                theft: "被抢劫！ 🦹",
+                bad_food: "食物中毒 🤢",
+                lost_ticket: "票丢失 🎫",
+                umbrella: "买了雨伞 ☂️",
+                coffee_spill: "洒了咖啡 ☕",
+                work: "工作日 💼",
+                groceries: "买杂货 🛒",
+                read_book: "读书 📖",
+                walk: "散步 🚶",
+                netflix: "看Netflix 📺",
+                found_money: "捡到钱！ 💰",
+                discount: "打折！ 🏷️",
+                compliment: "受到称赞 😊",
+                good_meal: "美餐 🍕",
+                bonus: "工作奖金！ 💎",
+                gift: "收到礼物！ 🎁",
+                lottery: "中彩票！ 🎰",
+                promotion: "升职！ 📈"
+            },
+            weather: {
+                sunny: "晴天 ☀️",
+                rainy: "雨天 🌧️",
+                cloudy: "阴天 ☁️",
+                stormy: "暴风雨 ⛈️",
+                snowy: "下雪 ❄️"
+            }
+        },
         sources: {
             disclaimer: "数据仅供参考，基于估算。",
             ksh: "来源：KSH",
             nm: "来源：negyzetmeterarak.hu",
             bankmonitor: "来源：Bankmonitor"
+        },
+        about: {
+            title: "关于",
+            description: "该程序旨在向 9-10 年级学生教授数字金融知识。其目的是通过互动方式展示日常财务决策的影响。",
+            usage: "使用上方的标签探索不同主题！从收入开始，然后进入支出、贷款和投资。",
+            disclaimer: "由 Mark Tremmel (SEK Budapest) 使用 Google Antigravity 创建，用于教授数字金融知识。可能包含错误。",
+            resources: "课程资源：",
+            sources: "使用的来源：",
+            linkText: "ghoul3.notion.site"
         }
     },
     tr: {
@@ -1301,11 +1611,62 @@ export const translations = {
                 sp500: "En büyük ABD şirketlerinin hisseleri. Daha yüksek risk, ancak tarihsel olarak daha yüksek getiri (~%12.5)."
             }
         },
+        simulator: {
+            title: "Hayat Simülatörü (Beta)",
+            desc: "Finansal kararlarınıza göre hayatı simüle edin. Her gün bir zar atışıdır.",
+            balance: "Bakiye",
+            happiness: "Mutluluk",
+            day: "Gün",
+            play: "Oynat",
+            pause: "Duraklat",
+            step: "1 Gün",
+            speed: "Hız",
+            diary: "Günlük",
+            events: {
+                broken_appliance: "Cihaz bozuldu 💥",
+                fine: "Ceza 🚓",
+                medical: "Tıbbi fatura 🏥",
+                theft: "Soyuldun! 🦹",
+                bad_food: "Gıda zehirlenmesi 🤢",
+                lost_ticket: "Bilet kayboldu 🎫",
+                umbrella: "Şemsiye alındı ☂️",
+                coffee_spill: "Kahve döküldü ☕",
+                work: "İş günü 💼",
+                groceries: "Market alışverişi 🛒",
+                read_book: "Kitap okuma 📖",
+                walk: "Yürüyüş 🚶",
+                netflix: "Netflix izleme 📺",
+                found_money: "Para bulundu! 💰",
+                discount: "İndirim! 🏷️",
+                compliment: "İltifat alındı 😊",
+                good_meal: "Güzel yemek 🍕",
+                bonus: "İş ikramiyesi! 💎",
+                gift: "Hediye alındı! 🎁",
+                lottery: "Piyango kazanıldı! 🎰",
+                promotion: "Terfi! 📈"
+            },
+            weather: {
+                sunny: "Güneşli ☀️",
+                rainy: "Yağmurlu 🌧️",
+                cloudy: "Bulutlu ☁️",
+                stormy: "Fırtınalı ⛈️",
+                snowy: "Karlı ❄️"
+            }
+        },
         sources: {
             disclaimer: "Veriler bilgilendirme amaçlıdır ve tahminlere dayanmaktadır.",
             ksh: "Kaynak: KSH",
             nm: "Kaynak: negyzetmeterarak.hu",
             bankmonitor: "Kaynak: Bankmonitor"
+        },
+        about: {
+            title: "Hakkında",
+            description: "Bu program, 9-10. sınıf öğrencilerine dijital finansal okuryazarlık öğretmek için tasarlanmıştır. Günlük finansal kararların etkisini etkileşimli bir şekilde göstermeyi amaçlamaktadır.",
+            usage: "Farklı konuları keşfetmek için yukarıdaki sekmeleri kullanın! Gelirle başlayın, ardından giderler, krediler ve yatırımlara geçin.",
+            disclaimer: "Dijital finansal okuryazarlık öğretmek amacıyla Google Antigravity kullanılarak Mark Tremmel (SEK Budapest) tarafından oluşturulmuştur. Hatalar içerebilir.",
+            resources: "Ders Kaynakları:",
+            sources: "Kullanılan Kaynaklar:",
+            linkText: "ghoul3.notion.site"
         }
     }
 };

@@ -1,16 +1,135 @@
-# React + Vite
+# Finance Calculator (Kiszámoló)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**A digital financial literacy education tool for 9th-10th grade students.**
 
-Currently, two official plugins are available:
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[🌐 Live Demo](https://marktremmel.github.io/FinanceCalc/) | [📚 Course Resources](https://ghoul3.notion.site)
 
-## React Compiler
+## 📖 Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Finance Calculator is an interactive web application designed to teach digital financial literacy to high school students (grades 9-10). Through hands-on calculations and simulations, students learn about income, taxes, expenses, loans, inflation, and investment strategies in an engaging way.
 
-## Expanding the ESLint configuration
+### ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **💰 Income & Tax Calculator**: Learn about gross vs. net income, tax deductions, and social security
+- **📊 Income Quintiles**: Understand where you stand on the social ladder based on Hungarian income data
+- **📝 Expense Tracking**: Interactive expense manager to understand monthly budgeting
+- **🏠 Housing Calculator**: Compare renting vs. buying scenarios with adjustable home size
+- **📈 Inflation Simulator**: Visualize how inflation affects purchasing power over time
+- **🎲 Life Simulator**: Experience randomsurvival events in a gamified financial simulation
+- **💎 Investment Comparison**: Compare cash, government bonds, and stock market returns
+- **🌍 Multi-language Support**: Available in Hungarian, English, Spanish, German, Russian, Chinese, and Turkish
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/marktremmel/FinanceCalc.git
+cd FinanceCalc/finance-calc
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 🎓 Educational Use
+
+This tool was created for teaching digital financial literacy at SEK Budapest. The interactive approach helps students:
+
+1. Understand the difference between gross and net income
+2. Grasp the impact of taxes and social security contributions
+3. Learn budgeting through expense tracking
+4. Make informed decisions about housing (rent vs. buy)
+5. Understand inflation's effect on money value
+6. Compare different investment strategies
+7. Experience financial decision-making through simulation
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18 with Vite
+- **Styling**: Tailwind CSS
+- **Charts**: Recharts
+- **Icons**: Lucide React
+- **Build**: Vite
+- **Deployment**: GitHub Pages
+
+## 📊 Data Sources
+
+- **Income Data**: [KSH (Hungarian Central Statistical Office)](https://www.ksh.hu/stadat_files/jov/hu/jov0055.html)
+- **Quintiles**: [KSH Income Distribution](https://www.ksh.hu/stadat_files/jov/hu/jov0052.html)
+- **Housing Prices**: [Negyzetmeterarak.hu](https://negyzetmeterarak.hu/statisztika?ugylet=elado&tipus=lakas)
+- **Rental Prices**: [Negyzetmeterarak.hu](https://negyzetmeterarak.hu/statisztika?ugylet=kiado&tipus=lakas)
+- **Average Home Size**: [Koltozzbe.hu](https://koltozzbe.hu/statisztikak/budapest/)
+- **Loan Rates**: [Bankmonitor](https://bankmonitor.hu/mediatar/cikk/mire-szamithatsz-2025-oktobereben-ha-most-vennel-fel-lakashitelt/)
+- **Inflation Data**: [KSH Inflation Statistics](https://www.ksh.hu/stadat_files/ara/hu/ara0040.html)
+
+> **Disclaimer**: Data is for educational purposes and based on estimates. May contain inaccuracies.
+
+## 🌐 Deployment
+
+### GitHub Pages Deployment
+
+1. **Configure Vite for GitHub Pages**:
+   - The `vite.config.js` is already configured with `base: '/FinanceCalc/'`
+
+2. **Build the project**:
+   ```bash
+   npm run build
+   ```
+
+3. **Deploy to GitHub Pages**:
+   ```bash
+   # Install gh-pages package
+   npm install -D gh-pages
+   
+   # Add deploy script to package.json (already added)
+   # "deploy": "npm run build && gh-pages -d dist"
+   
+   # Deploy
+   npm run deploy
+   ```
+
+4. **Configure GitHub Repository**:
+   - Go to your repository settings
+   - Navigate to Pages section
+   - Set source to `gh-pages` branch
+   - Your site will be live at: `https://marktremmel.github.io/FinanceCalc/`
+
+### Alternative: Manual Deployment
+
+```bash
+# Build the project
+npm run build
+
+# The dist folder contains your production build
+# Upload the contents to your hosting service
+```
+
+## 📝 License
+
+MIT License - Created by Mark Tremmel (SEK Budapest) with Google Antigravity for teaching digital financial literacy.
+
+## 🤝 Contributing
+
+This is an educational project. Suggestions and improvements are welcome! Please open an issue or submit a pull request.
+
+## 📧 Contact
+
+Mark Tremmel - SEK Budapest
+
+---
+
+**Made with ❤️ for financial education**

@@ -3,7 +3,8 @@ import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line
 } from 'recharts';
-import { Calculator, TrendingUp, Home, PieChart as PieIcon, Info, Check, X, Globe, Coins, Dice5, AlertTriangle } from 'lucide-react';
+import { getRandomEvent, getRandomWeather } from './simulatorData';
+import { Calculator, TrendingUp, Home, PieChart as PieIcon, Info, Check, X, Globe, Coins, Dice5, AlertTriangle, RefreshCw } from 'lucide-react';
 import { translations } from './translations';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
@@ -114,6 +115,20 @@ export default function App() {
   const [hourlyWage, setHourlyWage] = useState(0);
   const [calculationMode, setCalculationMode] = useState('fromGross'); // 'fromGross' or 'fromHourly'
 
+  // Simulator State
+  const [simState, setSimState] = useState({
+    date: new Date(),
+    balance: 0,
+    happiness: 50,
+    history: [],
+    isPlaying: false,
+    speed: 2000,
+    weather: { id: 'sunny', icon: '☀️', moodMod: 5 }
+  });
+
+
+
+
   useEffect(() => {
     if (userCalcSZJA !== '' && userCalcTB !== '') {
       setShowIncomeResult(true);
@@ -193,6 +208,68 @@ export default function App() {
   const realTB = Math.round(grossIncome * REF_DATA.tax_TB);
   const realNet = grossIncome - realSZJA - realTB;
   const employerCost = Math.round(grossIncome * 1.13);
+
+  // Simulator Logic
+  const tick = () => {
+    setSimState(prev => {
+      const nextDate = new Date(prev.date);
+      nextDate.setDate(nextDate.getDate() + 1);
+
+      // Weather change (20% chance)
+      let nextWeather = prev.weather;
+      if (Math.random() < 0.2) {
+        nextWeather = getRandomWeather();
+      }
+
+      // Daily Event
+      const roll = Math.floor(Math.random() * 20) + 1;
+      const event = getRandomEvent(roll);
+
+      // Financials
+      // event.cost is positive for bad events (cost), negative for good events (gain)
+      // So we subtract event.cost from balance.
+      let dailyChange = event.cost ? -event.cost : 0;
+
+      // Daily Expenses (Total / 30)
+      const dailyExpenses = totalExpenses / 30;
+      dailyChange -= dailyExpenses;
+
+      // Salary (1st of month - Start with Net Income)
+      if (nextDate.getDate() === 1) {
+        dailyChange += realNet;
+      }
+
+      // Happiness
+      let nextHappiness = prev.happiness + (event.mood || 0) + (nextWeather.moodMod || 0);
+      nextHappiness = Math.max(0, Math.min(100, nextHappiness));
+
+      const newEntry = {
+        date: nextDate,
+        event: event,
+        weather: nextWeather,
+        change: dailyChange,
+        balance: prev.balance + dailyChange,
+        happiness: nextHappiness
+      };
+
+      return {
+        ...prev,
+        date: nextDate,
+        balance: prev.balance + dailyChange,
+        happiness: nextHappiness,
+        weather: nextWeather,
+        history: [newEntry, ...prev.history].slice(0, 50) // Keep last 50
+      };
+    });
+  };
+
+  useEffect(() => {
+    let interval;
+    if (simState.isPlaying) {
+      interval = setInterval(tick, simState.speed);
+    }
+    return () => clearInterval(interval);
+  }, [simState.isPlaying, simState.speed, realNet, totalExpenses]);
 
   // Hourly wage calculations (assuming ~174 work hours per month for 40h/week)
   const monthlyWorkHours = (hoursPerWeek * 52) / 12;
@@ -295,6 +372,15 @@ export default function App() {
     }
   };
 
+  const handleResetInvestment = () => {
+    setBankruptcy(false);
+    setDisasterMsg('');
+    setDisasterHistory([]);
+    setInitialSavings(0);
+    setMonthlySavings(0);
+    setInvestYears(10);
+  };
+
   const investmentData = [
     { name: t.investment.scenarios.pillow, rate: 0, color: '#8884d8' },
     { name: t.investment.scenarios.bond, rate: 7, color: '#82ca9d' },
@@ -356,8 +442,14 @@ export default function App() {
           <button onClick={() => setActiveTab('inflation')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all ${activeTab === 'inflation' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>
             <TrendingUp size={18} className="rotate-180" /> {t.tabs.inflation}
           </button>
+          <button onClick={() => setActiveTab('simulator')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all ${activeTab === 'simulator' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>
+            <Dice5 size={18} /> {t.simulator.title}
+          </button>
           <button onClick={() => setActiveTab('investment')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all ${activeTab === 'investment' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>
             <Coins size={18} /> {t.tabs.investment}
+          </button>
+          <button onClick={() => setActiveTab('about')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all ${activeTab === 'about' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>
+            <Info size={18} /> {t.tabs.about}
           </button>
         </div>
 
@@ -864,12 +956,14 @@ export default function App() {
 
               <div className="space-y-6">
                 {/* District Selector */}
-                <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
-                  <h4 className="font-bold text-indigo-800 mb-2">{t.loan.districtTitle}</h4>
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    {t.loan.districtTitle}
+                  </label>
                   <select
                     value={selectedDistrict.id}
                     onChange={(e) => setSelectedDistrict(DISTRICTS.find(d => d.id === e.target.value))}
-                    className="w-full p-2 border rounded mb-4"
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                   >
                     {DISTRICTS.map(d => (
                       <option key={d.id} value={d.id}>{d.name}</option>
@@ -877,113 +971,119 @@ export default function App() {
                   </select>
 
                   {/* Home Size Slider */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-slate-600 mb-1">{t.loan.homeSizeLabel}</label>
+                  <div className="mt-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <label className="block text-sm font-medium text-slate-700 mb-2 flex justify-between">
+                      <span>{t.loan.homeSizeLabel || "Lakás mérete"}</span>
+                      <span className="font-bold text-indigo-700">{homeSize} m²</span>
+                    </label>
                     <input
                       type="range"
                       min="20"
-                      max="150"
+                      max="200"
                       step="1"
                       value={homeSize}
                       onChange={(e) => setHomeSize(Number(e.target.value))}
-                      className="w-full accent-indigo-500"
+                      className="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                     />
-                    <div className="text-right font-mono font-bold text-indigo-600">{homeSize} m²</div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-slate-500">{t.loan.priceSqm}</p>
-                      <p className="font-bold text-indigo-700">{selectedDistrict.priceSqm.toLocaleString()} Ft/m²</p>
-                    </div>
-                    <div>
-                      <p className="text-slate-500">{t.loan.rentSqm}</p>
-                      <p className="font-bold text-indigo-700">{selectedDistrict.rentSqm.toLocaleString()} Ft/m²</p>
-                    </div>
-                    <div>
-                      <p className="text-slate-500">{t.loan.estPrice}</p>
-                      <p className="font-bold text-indigo-700">{estimatedHomePrice.toLocaleString()} Ft</p>
-                    </div>
-                    <div>
-                      <p className="text-slate-500">{t.loan.estRent}</p>
-                      <p className="font-bold text-indigo-700">{estimatedRent.toLocaleString()} Ft/hó</p>
+                    <div className="flex justify-between text-xs text-slate-400 mt-1">
+                      <span>20 m²</span>
+                      <span>200 m²</span>
                     </div>
                   </div>
 
-                  <div className="mt-4 flex flex-col gap-2">
-                    <button
-                      onClick={() => addToExpenses(`Albérlet (${selectedDistrict.id}. ker, ${homeSize}m²)`, estimatedRent)}
-                      className="text-xs bg-white border border-indigo-300 text-indigo-700 px-3 py-2 rounded hover:bg-indigo-50 transition-colors"
-                    >
-                      {t.loan.addRentBtn}
-                    </button>
-                  </div>
-                  <div className="mt-2 text-xs text-slate-400 italic">
-                    {t.sources.nm}
+                  <div className="mt-4 grid grid-cols-2 gap-4">
+                    <div className="bg-indigo-50 p-3 rounded border border-indigo-100">
+                      <p className="text-xs text-indigo-500 uppercase font-bold">{t.loan.priceSqm}</p>
+                      <p className="font-mono font-bold text-indigo-900">{formatHU(selectedDistrict.priceSqm)} Ft</p>
+                      <div className="mt-2 pt-2 border-t border-indigo-200">
+                        <p className="text-xs text-indigo-500 uppercase font-bold">{t.loan.estPrice || "Becsült Ár"}</p>
+                        <p className="font-mono font-bold text-indigo-900 text-lg">{formatHU(estimatedHomePrice)} Ft</p>
+                      </div>
+                    </div>
+                    <div className="bg-emerald-50 p-3 rounded border border-emerald-100">
+                      <p className="text-xs text-emerald-500 uppercase font-bold">{t.loan.rentSqm}</p>
+                      <p className="font-mono font-bold text-emerald-900">{formatHU(selectedDistrict.rentSqm)} Ft</p>
+                      <div className="mt-2 pt-2 border-t border-emerald-200">
+                        <p className="text-xs text-emerald-500 uppercase font-bold">{t.loan.estRent || "Becsült Bérleti Díj"}</p>
+                        <p className="font-mono font-bold text-emerald-900 text-lg">{formatHU(estimatedRent)} Ft</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Supported Loan (3%) Card */}
-                <div className="p-4 rounded-lg bg-emerald-100 border-2 border-emerald-500 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 bg-emerald-500 text-white text-xs px-2 py-1 rounded-bl">{t.loan.supported}</div>
-                  <h4 className="font-bold text-emerald-800">{isSplitLoan ? t.loan.splitLoanTitle : t.loan.stateLoan}</h4>
-                  {isSplitLoan && (
-                    <div className="text-xs text-orange-700 bg-orange-100 p-2 rounded mb-2 border border-orange-300">
-                      ⚠️ {t.loan.splitLoanWarning}
-                    </div>
-                  )}
-                  <div className="text-3xl font-extrabold text-emerald-900 my-2">
-                    {isSplitLoan ? monthlyPaymentTotal.toLocaleString() : monthlyPayment3Pct.toLocaleString()} Ft
-                    <span className="text-sm font-normal text-emerald-700">{t.loan.perMonth}</span>
-                  </div>
-                  {isSplitLoan && (
-                    <div className="text-xs text-slate-700 space-y-1 mb-2">
-                      <div>3% {t.loan.portion}: {monthlyPayment3Pct.toLocaleString()} Ft ({supportedAmount.toLocaleString()} Ft)</div>
-                      <div>7.24% {t.loan.portion}: {monthlyPaymentMarketPortion.toLocaleString()} Ft ({marketAmount.toLocaleString()} Ft)</div>
-                    </div>
-                  )}
-                  <p className="text-xs text-emerald-700">
-                    {t.loan.totalRepay} {((isSplitLoan ? monthlyPaymentTotal : monthlyPayment3Pct) * loanDetails.years * 12).toLocaleString()} Ft
-                  </p>
+                <div className="mt-4 flex flex-col gap-2">
                   <button
-                    onClick={() => addToExpenses(
-                      isSplitLoan ? `Lakáshitel (vegyes 3%+7.24%)` : 'Lakáshitel (3%)',
-                      isSplitLoan ? monthlyPaymentTotal : monthlyPayment3Pct
-                    )}
-                    className="mt-2 w-full text-xs bg-emerald-600 text-white px-3 py-2 rounded hover:bg-emerald-700 transition-colors">
-                    {t.loan.addLoanBtn}
+                    onClick={() => addToExpenses(`Albérlet (${selectedDistrict.id}. ker, ${homeSize}m²)`, estimatedRent)}
+                    className="text-xs bg-white border border-indigo-300 text-indigo-700 px-3 py-2 rounded hover:bg-indigo-50 transition-colors"
+                  >
+                    {t.loan.addRentBtn}
                   </button>
                 </div>
-
-                {/* Market Loan Card (Full amount @ 7.24%) */}
-                <div className="p-4 rounded-lg bg-slate-100 border border-slate-300 relative opacity-80 hover:opacity-100 transition-opacity">
-                  <div className="absolute top-0 right-0 bg-slate-500 text-white text-xs px-2 py-1 rounded-bl">{t.loan.market}</div>
-                  <h4 className="font-bold text-slate-700">{t.loan.marketLoanOnly}</h4>
-                  <div className="text-3xl font-bold text-slate-600 my-2">
-                    {monthlyPaymentMarketOnly.toLocaleString()} Ft <span className="text-sm font-normal text-slate-500">{t.loan.perMonth}</span>
-                  </div>
-                  <p className="text-xs text-slate-500">{t.loan.totalRepay} {(monthlyPaymentMarketOnly * loanDetails.years * 12).toLocaleString()} Ft</p>
-                  <div className="mt-1 text-xs text-slate-400 italic">{t.sources.bankmonitor}</div>
-                  <button
-                    onClick={() => addToExpenses('Lakáshitel (piaci 7.24%)', monthlyPaymentMarketOnly)}
-                    className="mt-2 w-full text-xs bg-slate-400 text-white px-3 py-2 rounded hover:bg-slate-500 transition-colors">
-                    {t.loan.addLoanBtn}
-                  </button>
+                <div className="mt-2 text-xs text-slate-400 italic">
+                  {t.sources.nm}
                 </div>
+              </div>
 
-                <div className="text-center text-red-500 font-bold text-sm">
-                  {t.loan.diff} +{(monthlyPaymentMarketOnly - (isSplitLoan ? monthlyPaymentTotal : monthlyPayment3Pct)).toLocaleString()} Ft
-                </div>
-
-                {feedbackMsg && (
-                  <div className="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-xl animate-in fade-in slide-in-from-bottom-4">
-                    <div className="flex items-center gap-2">
-                      <Check size={20} />
-                      {feedbackMsg}
-                    </div>
+              {/* Supported Loan (3%) Card */}
+              <div className="p-4 rounded-lg bg-emerald-100 border-2 border-emerald-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-emerald-500 text-white text-xs px-2 py-1 rounded-bl">{t.loan.supported}</div>
+                <h4 className="font-bold text-emerald-800">{isSplitLoan ? t.loan.splitLoanTitle : t.loan.stateLoan}</h4>
+                {isSplitLoan && (
+                  <div className="text-xs text-orange-700 bg-orange-100 p-2 rounded mb-2 border border-orange-300">
+                    ⚠️ {t.loan.splitLoanWarning}
                   </div>
                 )}
+                <div className="text-3xl font-extrabold text-emerald-900 my-2">
+                  {isSplitLoan ? monthlyPaymentTotal.toLocaleString() : monthlyPayment3Pct.toLocaleString()} Ft
+                  <span className="text-sm font-normal text-emerald-700">{t.loan.perMonth}</span>
+                </div>
+                {isSplitLoan && (
+                  <div className="text-xs text-slate-700 space-y-1 mb-2">
+                    <div>3% {t.loan.portion}: {monthlyPayment3Pct.toLocaleString()} Ft ({supportedAmount.toLocaleString()} Ft)</div>
+                    <div>7.24% {t.loan.portion}: {monthlyPaymentMarketPortion.toLocaleString()} Ft ({marketAmount.toLocaleString()} Ft)</div>
+                  </div>
+                )}
+                <p className="text-xs text-emerald-700">
+                  {t.loan.totalRepay} {((isSplitLoan ? monthlyPaymentTotal : monthlyPayment3Pct) * loanDetails.years * 12).toLocaleString()} Ft
+                </p>
+                <button
+                  onClick={() => addToExpenses(
+                    isSplitLoan ? `Lakáshitel (vegyes 3%+7.24%)` : 'Lakáshitel (3%)',
+                    isSplitLoan ? monthlyPaymentTotal : monthlyPayment3Pct
+                  )}
+                  className="mt-2 w-full text-xs bg-emerald-600 text-white px-3 py-2 rounded hover:bg-emerald-700 transition-colors">
+                  {t.loan.addLoanBtn}
+                </button>
               </div>
+
+              {/* Market Loan Card (Full amount @ 7.24%) */}
+              <div className="p-4 rounded-lg bg-slate-100 border border-slate-300 relative opacity-80 hover:opacity-100 transition-opacity">
+                <div className="absolute top-0 right-0 bg-slate-500 text-white text-xs px-2 py-1 rounded-bl">{t.loan.market}</div>
+                <h4 className="font-bold text-slate-700">{t.loan.marketLoanOnly}</h4>
+                <div className="text-3xl font-bold text-slate-600 my-2">
+                  {monthlyPaymentMarketOnly.toLocaleString()} Ft <span className="text-sm font-normal text-slate-500">{t.loan.perMonth}</span>
+                </div>
+                <p className="text-xs text-slate-500">{t.loan.totalRepay} {(monthlyPaymentMarketOnly * loanDetails.years * 12).toLocaleString()} Ft</p>
+                <div className="mt-1 text-xs text-slate-400 italic">{t.sources.bankmonitor}</div>
+                <button
+                  onClick={() => addToExpenses('Lakáshitel (piaci 7.24%)', monthlyPaymentMarketOnly)}
+                  className="mt-2 w-full text-xs bg-slate-400 text-white px-3 py-2 rounded hover:bg-slate-500 transition-colors">
+                  {t.loan.addLoanBtn}
+                </button>
+              </div>
+
+              <div className="text-center text-red-500 font-bold text-sm">
+                {t.loan.diff} +{(monthlyPaymentMarketOnly - (isSplitLoan ? monthlyPaymentTotal : monthlyPayment3Pct)).toLocaleString()} Ft
+              </div>
+
+              {feedbackMsg && (
+                <div className="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-xl animate-in fade-in slide-in-from-bottom-4">
+                  <div className="flex items-center gap-2">
+                    <Check size={20} />
+                    {feedbackMsg}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -999,13 +1099,7 @@ export default function App() {
               </div>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <p className="text-slate-600 text-justify">
-                  Az infláció azt jelenti, hogy a pénzed értéke romlik. Ha 10%-os az infláció, akkor ami tavaly 100 Ft volt, az idén 110 Ft-ba kerül. Vagy fordítva: a 100 forintod ma már csak 90-et ér vásárlóerőben.
-                  <br /><br />
-                  A KSH ezt a "fogyasztói kosár" alapján méri, amiben benne van minden: kenyér, benzin, rezsi.
-                </p>
-              </div>
+
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-xl shadow-md">
                   <h3 className="font-bold text-gray-700 mb-4">{t.inflation.simTitle}</h3>
@@ -1053,112 +1147,291 @@ export default function App() {
               </div>
             </div>
           </div>
-        )}
+        )
+        }
 
         {/* --- INVESTMENT TAB --- */}
-        {activeTab === 'investment' && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-indigo-800">{t.investment.title}</h2>
-              <p className="text-slate-600 max-w-2xl mx-auto mt-2">{t.investment.subtitle}</p>
-            </div>
-
-            {bankruptcy && (
-              <div className="bg-red-600 text-white p-4 rounded-xl shadow-xl text-center font-bold text-xl animate-pulse mb-6">
-                <AlertTriangle className="inline-block mr-2" /> {t.investment.disaster.bankruptcy}
-              </div>
-            )}
-
-            {disasterMsg && (
-              <div className="fixed top-24 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl z-50 animate-bounce">
-                <div className="flex items-center gap-2">
-                  <Dice5 size={24} />
-                  <span className="font-bold text-lg">{disasterMsg}</span>
+        {
+          activeTab === 'simulator' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* Header / Status Bar */}
+              <div className="bg-white p-6 rounded-xl shadow-md grid grid-cols-2 md:grid-cols-4 gap-4 items-center sticky top-0 z-10 border-b-4 border-indigo-100">
+                <div className="text-center">
+                  <p className="text-sm text-slate-500 uppercase font-bold tracking-wider">{t.simulator.day}</p>
+                  <p className="text-2xl font-bold text-indigo-700">{simState.date.toLocaleDateString(lang === 'hu' ? 'hu-HU' : 'en-US')}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-slate-500 uppercase font-bold tracking-wider">{t.simulator.balance}</p>
+                  <p className={`text-2xl font-bold ${simState.balance >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {formatHU(simState.balance)} Ft
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-slate-500 uppercase font-bold tracking-wider">{t.simulator.happiness}</p>
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-2xl">{simState.happiness > 70 ? '😄' : simState.happiness > 30 ? '😐' : '😢'}</span>
+                    <div className="w-24 h-3 bg-slate-200 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full ${simState.happiness > 70 ? 'bg-emerald-500' : simState.happiness > 30 ? 'bg-amber-500' : 'bg-red-500'}`}
+                        style={{ width: `${simState.happiness}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-slate-500 uppercase font-bold tracking-wider">Időjárás</p>
+                  <p className="text-3xl">{simState.weather.icon}</p>
                 </div>
               </div>
-            )}
 
-            <div className="grid md:grid-cols-3 gap-8">
               {/* Controls */}
-              <div className="bg-white p-6 rounded-xl shadow-md space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-bold text-gray-700">{t.investment.labels.initialAmount}</h3>
-                  <button
-                    onClick={rollDisaster}
-                    className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-colors"
-                    disabled={bankruptcy}
-                  >
-                    <Dice5 size={14} /> {t.investment.disaster.btn}
-                  </button>
-                </div>
-                <input
-                  type="number"
-                  value={initialSavings}
-                  onChange={(e) => setInitialSavings(Number(e.target.value))}
-                  className="w-full p-2 border rounded"
-                  disabled={bankruptcy}
-                />
+              <div className="bg-white p-4 rounded-xl shadow-md flex justify-center space-x-4 items-center">
+                <button
+                  onClick={() => setSimState(prev => ({ ...prev, isPlaying: !prev.isPlaying }))}
+                  className={`px-6 py-3 rounded-full font-bold text-white shadow-lg transition-transform active:scale-95 ${simState.isPlaying ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-600 hover:bg-emerald-700'}`}
+                >
+                  {simState.isPlaying ? `⏸ ${t.simulator.pause}` : `▶️ ${t.simulator.play}`}
+                </button>
 
-                <div>
-                  <h3 className="font-bold text-gray-700 mb-2">{t.investment.labels.monthlySavings}</h3>
+                <button
+                  onClick={tick}
+                  disabled={simState.isPlaying}
+                  className="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg font-semibold hover:bg-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  ⏭ {t.simulator.step}
+                </button>
+
+                <div className="flex items-center gap-2 bg-slate-100 px-3 py-2 rounded-lg">
+                  <span className="text-xs font-bold text-slate-500">{t.simulator.speed}:</span>
+                  <button
+                    onClick={() => setSimState(prev => ({ ...prev, speed: 2000 }))}
+                    className={`px-2 py-1 text-xs rounded ${simState.speed === 2000 ? 'bg-white shadow text-indigo-600' : 'text-slate-400'}`}
+                  >1x</button>
+                  <button
+                    onClick={() => setSimState(prev => ({ ...prev, speed: 400 }))}
+                    className={`px-2 py-1 text-xs rounded ${simState.speed === 400 ? 'bg-white shadow text-indigo-600' : 'text-slate-400'}`}
+                  >5x</button>
+                </div>
+              </div>
+
+              {/* Diary Feed */}
+              <div className="bg-white p-6 rounded-xl shadow-md">
+                <h3 className="text-xl font-bold text-slate-700 mb-4 flex items-center gap-2">
+                  📖 {t.simulator.diary}
+                </h3>
+                <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                  {simState.history.length === 0 ? (
+                    <div className="text-center text-slate-400 py-10 italic">
+                      Kezdd el a szimulációt a Start gombbal!
+                    </div>
+                  ) : (
+                    simState.history.map((entry, idx) => (
+                      <div key={idx} className="flex gap-4 p-4 rounded-lg bg-slate-50 border border-slate-100 hover:shadow-sm transition-shadow">
+                        <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm border border-slate-100">
+                          {entry.event.icon}
+                        </div>
+                        <div className="flex-grow">
+                          <div className="flex justify-between items-start">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                              {entry.date.toLocaleDateString(lang === 'hu' ? 'hu-HU' : 'en-US')} • {entry.weather.icon}
+                            </span>
+                            <span className={`font-mono font-bold ${entry.change > 0 ? 'text-emerald-600' : entry.change < 0 ? 'text-red-600' : 'text-slate-400'}`}>
+                              {entry.change > 0 ? '+' : ''}{entry.change !== 0 ? formatHU(entry.change) : ''} Ft
+                            </span>
+                          </div>
+                          <p className="font-semibold text-slate-700 mt-1">
+                            {t.simulator.events[entry.event.id] || entry.event.id}
+                          </p>
+                          <div className="flex gap-2 mt-2">
+                            {entry.event.category === 'criticalFail' && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">CRITICAL FAIL (1)</span>}
+                            {entry.event.category === 'criticalSuccess' && <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">CRITICAL SUCCESS (20)</span>}
+                            {entry.event.mood !== 0 && (
+                              <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${entry.event.mood > 0 ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                                {entry.event.mood > 0 ? '+' : ''}{entry.event.mood} Mood
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        }
+
+        {
+          activeTab === 'investment' && (
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-indigo-800">{t.investment.title}</h2>
+                <p className="text-slate-600 max-w-2xl mx-auto mt-2">{t.investment.subtitle}</p>
+              </div>
+
+              {bankruptcy && (
+                <div className="mb-6">
+                  <div className="bg-red-600 text-white p-4 rounded-xl shadow-xl text-center font-bold text-xl animate-pulse mb-4">
+                    <AlertTriangle className="inline-block mr-2" /> {t.investment.disaster.bankruptcy}
+                  </div>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={handleResetInvestment}
+                      className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition-colors shadow-md flex items-center gap-2"
+                    >
+                      <RefreshCw size={20} /> {lang === 'hu' ? 'Újrakezd' : 'Reset'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {disasterMsg && (
+                <div className="fixed top-24 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl z-50 animate-bounce">
+                  <div className="flex items-center gap-2">
+                    <Dice5 size={24} />
+                    <span className="font-bold text-lg">{disasterMsg}</span>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid md:grid-cols-3 gap-8">
+                {/* Controls */}
+                <div className="bg-white p-6 rounded-xl shadow-md space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h3 className="font-bold text-gray-700">{t.investment.labels.initialAmount}</h3>
+                    <button
+                      onClick={rollDisaster}
+                      className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-colors"
+                      disabled={bankruptcy}
+                    >
+                      <Dice5 size={14} /> {t.investment.disaster.btn}
+                    </button>
+                  </div>
                   <input
                     type="number"
-                    value={monthlySavings}
-                    onChange={(e) => setMonthlySavings(Number(e.target.value))}
+                    value={initialSavings}
+                    onChange={(e) => setInitialSavings(Number(e.target.value))}
                     className="w-full p-2 border rounded"
                     disabled={bankruptcy}
                   />
+
+                  <div>
+                    <h3 className="font-bold text-gray-700 mb-2">{t.investment.labels.monthlySavings}</h3>
+                    <input
+                      type="number"
+                      value={monthlySavings}
+                      onChange={(e) => setMonthlySavings(Number(e.target.value))}
+                      className="w-full p-2 border rounded"
+                      disabled={bankruptcy}
+                    />
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-gray-700 mb-2">{t.investment.labels.duration}</h3>
+                    <input
+                      type="range"
+                      min="1"
+                      max="30"
+                      value={investYears}
+                      onChange={(e) => setInvestYears(Number(e.target.value))}
+                      className="w-full accent-indigo-600"
+                    />
+                    <div className="text-right font-mono font-bold text-indigo-600">{investYears} év</div>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="font-bold text-gray-700 mb-2">{t.investment.labels.duration}</h3>
-                  <input
-                    type="range"
-                    min="1"
-                    max="30"
-                    value={investYears}
-                    onChange={(e) => setInvestYears(Number(e.target.value))}
-                    className="w-full accent-indigo-600"
-                  />
-                  <div className="text-right font-mono font-bold text-indigo-600">{investYears} év</div>
+                {/* Chart */}
+                <div className="md:col-span-2 bg-white p-6 rounded-xl shadow-md h-[400px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={mergedChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="year" label={{ value: 'Év', position: 'insideBottomRight', offset: -5 }} />
+                      <YAxis tickFormatter={(val) => `${val / 1000000}M`} />
+                      <Tooltip formatter={(val) => `${Math.round(val).toLocaleString()} Ft`} />
+                      <Legend />
+                      <Line type="monotone" dataKey={t.investment.scenarios.pillow} stroke="#8884d8" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey={t.investment.scenarios.bond} stroke="#82ca9d" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey={t.investment.scenarios.sp500} stroke="#ffc658" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
 
-              {/* Chart */}
-              <div className="md:col-span-2 bg-white p-6 rounded-xl shadow-md h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={mergedChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="year" label={{ value: 'Év', position: 'insideBottomRight', offset: -5 }} />
-                    <YAxis tickFormatter={(val) => `${val / 1000000}M`} />
-                    <Tooltip formatter={(val) => `${Math.round(val).toLocaleString()} Ft`} />
-                    <Legend />
-                    <Line type="monotone" dataKey={t.investment.scenarios.pillow} stroke="#8884d8" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey={t.investment.scenarios.bond} stroke="#82ca9d" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey={t.investment.scenarios.sp500} stroke="#ffc658" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
+              {/* Explanations */}
+              <div className="grid md:grid-cols-3 gap-4 mt-8">
+                <div className="bg-slate-100 p-4 rounded-lg border-t-4 border-slate-400">
+                  <h4 className="font-bold text-slate-700 mb-2">{t.investment.scenarios.pillow}</h4>
+                  <p className="text-sm text-slate-600">{t.investment.descriptions.pillow}</p>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg border-t-4 border-green-500">
+                  <h4 className="font-bold text-green-800 mb-2">{t.investment.scenarios.bond}</h4>
+                  <p className="text-sm text-green-700">{t.investment.descriptions.bond}</p>
+                </div>
+                <div className="bg-yellow-50 p-4 rounded-lg border-t-4 border-yellow-500">
+                  <h4 className="font-bold text-yellow-800 mb-2">{t.investment.scenarios.sp500}</h4>
+                  <p className="text-sm text-yellow-700">{t.investment.descriptions.sp500}</p>
+                </div>
               </div>
             </div>
+          )}
 
-            {/* Explanations */}
-            <div className="grid md:grid-cols-3 gap-4 mt-8">
-              <div className="bg-slate-100 p-4 rounded-lg border-t-4 border-slate-400">
-                <h4 className="font-bold text-slate-700 mb-2">{t.investment.scenarios.pillow}</h4>
-                <p className="text-sm text-slate-600">{t.investment.descriptions.pillow}</p>
+        {/* --- ABOUT TAB --- */}
+        {activeTab === 'about' && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-indigo-800">{t.about.title}</h2>
+              <p className="text-slate-600 mt-2 max-w-2xl mx-auto">{t.about.description}</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-white p-6 rounded-xl shadow-md space-y-4">
+                <h3 className="font-bold text-lg text-indigo-700 flex items-center gap-2">
+                  <Info className="w-5 h-5" /> {t.about.usage}
+                </h3>
+                <p className="text-slate-600 leading-relaxed">
+                  {t.about.usage}
+                </p>
+
+                <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100 mt-4">
+                  <h4 className="font-semibold text-indigo-800 mb-2">{t.about.resources}</h4>
+                  <a
+                    href="https://ghoul3.notion.site"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline font-medium"
+                  >
+                    <Globe size={16} /> {t.about.linkText}
+                  </a>
+                </div>
               </div>
-              <div className="bg-green-50 p-4 rounded-lg border-t-4 border-green-500">
-                <h4 className="font-bold text-green-800 mb-2">{t.investment.scenarios.bond}</h4>
-                <p className="text-sm text-green-700">{t.investment.descriptions.bond}</p>
-              </div>
-              <div className="bg-yellow-50 p-4 rounded-lg border-t-4 border-yellow-500">
-                <h4 className="font-bold text-yellow-800 mb-2">{t.investment.scenarios.sp500}</h4>
-                <p className="text-sm text-yellow-700">{t.investment.descriptions.sp500}</p>
+
+              <div className="bg-white p-6 rounded-xl shadow-md space-y-4">
+                <h3 className="font-bold text-lg text-slate-700">{t.about.sources}</h3>
+                <ul className="space-y-2 text-sm text-slate-600">
+                  <li className="flex items-center gap-2">
+                    <Check size={14} className="text-green-500" /> {t.sources.ksh}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check size={14} className="text-green-500" /> {t.sources.nm}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check size={14} className="text-green-500" /> {t.sources.bankmonitor}
+                  </li>
+                </ul>
+
+                <div className="mt-6 pt-6 border-t border-slate-100">
+                  <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-lg border border-amber-200 text-amber-800 text-sm">
+                    <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold mb-1">Disclaimer</p>
+                      <p>{t.about.disclaimer}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         )}
-
       </main>
     </div>
   );
